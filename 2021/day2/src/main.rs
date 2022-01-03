@@ -5,7 +5,8 @@ fn main() {
     let lines = read_file();
     let data = lines.unwrap();
 
-    part_one(data);
+    part_one(&data);
+    part_two(data);
 }
 
 fn read_file() -> Result<Vec<String>> {
@@ -20,7 +21,7 @@ fn read_file() -> Result<Vec<String>> {
     return Ok(final_result);
 }
 
-fn part_one(data: Vec<String>) {
+fn part_one(data: &Vec<String>) {
     let mut horizontal = 0;
     let mut depth = 0;
 
@@ -39,6 +40,38 @@ fn part_one(data: Vec<String>) {
             }
             Some("down") => {
                 depth = depth + amount;
+            }
+            Some(&_) => {}
+            None => {}
+        }
+    }
+
+    let total: i32 = depth * horizontal;
+
+    println!("Total: {}", total);
+}
+
+fn part_two(data: Vec<String>) {
+    let mut horizontal = 0;
+    let mut depth = 0;
+    let mut aim = 0;
+
+    for line in data {
+        let mut to_split = line.split_whitespace();
+        let command = to_split.next();
+        let amount_string = to_split.next().unwrap();
+        let amount: i32 = amount_string.parse().unwrap();
+
+        match command {
+            Some("forward") => {
+                horizontal = horizontal + amount;
+                depth = depth + (aim * amount);
+            }
+            Some("up") => {
+                aim = aim - amount;
+            }
+            Some("down") => {
+                aim = aim + amount;
             }
             Some(&_) => {}
             None => {}
